@@ -1,0 +1,10 @@
+spring:
+  liquibase:
+    change-log: db/changelog/changelog-root.xml
+  datasource:
+    url: jdbc:h2:mem:demo
+    username: user
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
