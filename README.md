@@ -1,5 +1,8 @@
 # Demo Task for Aston
 
+# How to run
+
+use `mvnw spring-boor:run`
 
 # REST API
 
