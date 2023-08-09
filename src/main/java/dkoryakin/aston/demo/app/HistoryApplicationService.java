@@ -15,7 +15,7 @@ public class HistoryApplicationService {
     public HistoryGetResponseBody getHistoryTransactionsByAccountId(Long accountId) {
         var results = historyService.getHistoryTransactionsById(accountId)
                 .stream()
-                .map(HistoryEntryView::from)
+                .map(HistoryEntryView.Factory::from)
                 .toList();
         return new HistoryGetResponseBody(results);
     }

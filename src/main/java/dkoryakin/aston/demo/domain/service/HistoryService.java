@@ -1,8 +1,7 @@
 package dkoryakin.aston.demo.domain.service;
 
-import dkoryakin.aston.demo.domain.event.OperationDoneEvent;
 import dkoryakin.aston.demo.domain.TransactionHistoryEntry;
-import dkoryakin.aston.demo.domain.repository.HistoryRepository;
+import dkoryakin.aston.demo.domain.event.OperationDoneEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -20,7 +19,7 @@ public class HistoryService {
     private final HistoryRepository historyRepository;
 
     public void handle(OperationDoneEvent event) {
-        TransactionHistoryEntry entry = TransactionHistoryEntry.from(event);
+        TransactionHistoryEntry entry = TransactionHistoryEntry.Factory.from(event);
         historyRepository.save(entry);
         log.info("Event was saved to history: " + event);
     }

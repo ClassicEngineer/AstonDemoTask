@@ -12,15 +12,15 @@ import java.util.Date;
 @ToString
 public class OperationDoneEvent {
 
-    private Long accountInId;
+    public Long accountInId;
 
-    private Long accountOutId;
+    public Long accountOutId;
 
-    private OperationType type;
+    public OperationType type;
 
-    private Double sum;
+    public Double sum;
 
     @Builder.Default
-    private Date date = new Date();
+    public Date date = new Date();
 
 }

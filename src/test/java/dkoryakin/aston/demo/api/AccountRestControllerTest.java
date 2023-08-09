@@ -1,7 +1,5 @@
 package dkoryakin.aston.demo.api;
 
-import dkoryakin.aston.demo.api.body.AccountCreatePostBody;
-import dkoryakin.aston.demo.api.body.AccountDepositPostBody;
 import dkoryakin.aston.demo.api.body.response.AccountView;
 import dkoryakin.aston.demo.domain.Account;
 import dkoryakin.aston.demo.domain.Pin;

@@ -54,8 +54,8 @@ public class HistorySavingIntegrationTest {
         HistoryGetResponseBody transactions = historyApplicationService.getHistoryTransactionsByAccountId(accountA.getId());
 
         boolean isAllMatch = transactions.getEntries().stream().allMatch(entry ->
-                entry.getType().equals(OperationType.TRANSFER) && entry.getSum().equals(transferAmount) &&
-                entry.getIncomeAccountId().equals(accountA.getId()) && entry.getReceivingAccountId().equals(accountB.getId()));
+                entry.getType().equals(OperationType.TRANSFER) && entry.getSum() == transferAmount &&
+                entry.getIncomeAccountId() == (accountA.getId()) && entry.getReceivingAccountId() == accountB.getId());
 
         Assertions.assertTrue(isAllMatch);
     }

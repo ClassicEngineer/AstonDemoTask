@@ -1,6 +1,5 @@
 package dkoryakin.aston.demo.api;
 
-import dkoryakin.aston.demo.api.body.response.AccountView;
 import dkoryakin.aston.demo.api.body.response.HistoryEntryView;
 import dkoryakin.aston.demo.app.HistoryApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
