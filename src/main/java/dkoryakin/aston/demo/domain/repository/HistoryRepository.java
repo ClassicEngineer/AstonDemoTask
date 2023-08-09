@@ -20,7 +20,7 @@ public class HistoryRepository {
 
 
     public Collection<TransactionHistoryEntry> findAllByAccountId(Long accountId) {
-        return jpaHistoryRepository.findAllByIncomeAccountIdEquals(accountId)
+        return jpaHistoryRepository.findAllByAccountIdEquals(accountId)
                 .stream()
                 .map(this::buildEntryFromEntity).toList();
     }
@@ -30,7 +30,7 @@ public class HistoryRepository {
                 .date(entry.getDate())
                 .type(entry.getType())
                 .sum(entry.getSum())
-                .incomeAccountId(entry.getIncomeAccountId())
+                .accountId(entry.getIncomeAccountId())
                 .receivingAccountId(entry.getReceivingAccountId())
                 .build();
     }
@@ -40,7 +40,7 @@ public class HistoryRepository {
                 .date(entity.getDate())
                 .type(entity.getType())
                 .sum(entity.getSum())
-                .incomeAccountId(entity.getIncomeAccountId())
+                .incomeAccountId(entity.getAccountId())
                 .receivingAccountId(entity.getReceivingAccountId())
                 .build();
     }

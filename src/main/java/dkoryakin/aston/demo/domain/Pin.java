@@ -24,7 +24,7 @@ public class Pin {
             return new Pin(pin);
         } catch (Exception e) {
             log.warning("String: " + str + " is not valid pin");
-            throw new PinValidationException(str, e);
+            throw new PinValidationException(e);
         }
     }
 

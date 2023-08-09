@@ -24,14 +24,14 @@ public class TransactionHistoryEntity {
     private OperationType type;
 
     @Basic
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "transaction_date")
     private Date date;
 
-    @Column(name = "in_account_id")
-    private Long incomeAccountId;
+    @Column(name = "account_id")
+    private Long accountId;
 
-    @Column(name = "out_account_id")
+    @Column(name = "receive_account_id")
     private Long receivingAccountId;
 
     @Column(name = "operation_sum")

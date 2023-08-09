@@ -16,9 +16,9 @@ public class TransactionHistoryRestController {
 
     private final HistoryApplicationService historyApplicationService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getHistoryTransactionsByAccountId(@PathVariable("id") Long id) {
-        var result = historyApplicationService.getHistoryTransactionsByAccountId(id);
+    @GetMapping("/{accountId}")
+    public ResponseEntity<?> getHistoryTransactionsByAccountId(@PathVariable("accountId") Long accountId) {
+        var result = historyApplicationService.getHistoryTransactionsByAccountId(accountId);
         return ResponseEntity.ok(result);
     }
 

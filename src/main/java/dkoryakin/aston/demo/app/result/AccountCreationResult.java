@@ -11,14 +11,14 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class AccountCreationResult {
 
-    private ApiOperationStatus status;
+    private Status status;
     private String description;
 
     private AccountView value;
 
 
     public static AccountCreationResult success(AccountView account) {
-        return new AccountCreationResult(ApiOperationStatus.SUCCESS, "Account successfully created", account);
+        return new AccountCreationResult(Status.SUCCESS, "Account successfully created", account);
     }
 
 

@@ -1,6 +1,6 @@
 package dkoryakin.aston.demo.domain.service;
 
-import dkoryakin.aston.demo.app.result.ApiOperationStatus;
+import dkoryakin.aston.demo.app.result.Status;
 import dkoryakin.aston.demo.domain.Account;
 import dkoryakin.aston.demo.domain.Pin;
 import dkoryakin.aston.demo.domain.repository.AccountRepository;
@@ -8,11 +8,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
@@ -50,6 +53,30 @@ class AccountServiceTest {
         Assertions.assertEquals(expected.getPin(), result.getPin());
     }
 
+    @Test
+    public void shouldMakeDepositOperation_whenDataIsCorrect() {
+        String name = "Dan";
+        Pin pin = Pin.valueOf("1234");
+        Account expected = Account.builder()
+                .id(1L)
+                .balance(0.0)
+                .pin(pin)
+                .name(name)
+                .build();
+
+        Double depositSum = 100.0;
+
+        Mockito.when(accountRepository.findAccountById(expected.getId()))
+                .thenReturn(Optional.of(expected));
+
+        var result = accountService.makeDeposit(expected.getId(), depositSum);
+
+
+        Assertions.assertEquals(Status.SUCCESS, result.getStatus());
+        Assertions.assertEquals(depositSum, result.getResult().getBalance());
+        Assertions.assertTrue(result.getEvent().isPresent());
+    }
+
 
     @Test
     public void shouldNotMakeWithdraw_whenAmountIsNotCorrect() {
@@ -68,7 +95,7 @@ class AccountServiceTest {
         var result = accountService.makeWithdraw(accountId, pin, incorrectAmount);
 
         Mockito.verify(accountRepository, Mockito.never()).save(Mockito.any());
-        Assertions.assertEquals(ApiOperationStatus.FAIL, result.getStatus());
+        Assertions.assertEquals(Status.FAIL, result.getStatus());
     }
 
 
@@ -76,9 +103,9 @@ class AccountServiceTest {
     public void shouldNotMakeTransfer_whenOutcomeIdIsNotCorrect() {
         Long accountId= 1L;
         Pin pin = Pin.valueOf("1234");
-        Double incorrectAmount = 3000.0;
+        Double transferAmount = 5.0;
         Account expected = Account.builder()
-                .id(1lL
+                .id(1L)
                 .balance(10.0)
                 .pin(pin)
                 .name("Dan")
@@ -90,10 +117,45 @@ class AccountServiceTest {
         Mockito.when(accountRepository.findAccountById(incorrectTransferId)).thenReturn(Optional.empty());
 
 
-        var result = accountService.makeTransfer(accountId, incorrectTransferId, pin, incorrectAmount);
+        var result = accountService.makeTransfer(accountId, incorrectTransferId, pin, transferAmount);
 
         Mockito.verify(accountRepository, Mockito.never()).save(Mockito.any());
-        Assertions.assertEquals(ApiOperationStatus.FAIL, result.getStatus());
+        Assertions.assertEquals(Status.FAIL, result.getStatus());
+    }
+
+    @Test
+    public void shouldMakeTransferCorrectly_whenTransferDataIsNotCorrect() {
+        Pin pin = Pin.valueOf("1234");
+        Account accountA = Account.builder()
+                .id(1L)
+                .balance(100.0)
+                .pin(pin)
+                .name("Dan")
+                .build();
+
+        Account accountB = Account.builder()
+                .id(2L)
+                .balance(0.0)
+                .pin(pin)
+                .name("Ben")
+                .build();
+        Double transferAmount = 50.0;
+
+        Mockito.when(accountRepository.findAccountByIdAndPin(accountA.getId(), accountA.getPin())).thenReturn(Optional.of(accountA));
+        Mockito.when(accountRepository.findAccountById(accountB.getId())).thenReturn(Optional.of(accountB));
+        ArgumentCaptor<Account> accountCaptor = ArgumentCaptor.forClass(Account.class);
+
+        var result = accountService.makeTransfer(accountA.getId(), accountB.getId(), accountA.getPin(), transferAmount);
+
+        Mockito.verify(accountRepository, times(2)).save(accountCaptor.capture());
+
+        Account a = accountCaptor.getAllValues().stream().filter(account -> account.getId().equals(accountA.getId())).findFirst().get();
+        Account b = accountCaptor.getAllValues().stream().filter(account -> account.getId().equals(accountB.getId())).findFirst().get();
+
+
+        Assertions.assertEquals(50.0, a.getBalance());
+        Assertions.assertEquals(50.0, b.getBalance());
+        Assertions.assertEquals(Status.SUCCESS, result.getStatus());
     }
 
 }

@@ -16,17 +16,17 @@ import java.util.Optional;
 @AllArgsConstructor
 public class OperationResult {
 
-    private ApiOperationStatus status;
+    private Status status;
     private String description;
     private OperationDoneEvent event;
     private AccountView result;
 
     public static OperationResult nonAuthorized() {
-        return new OperationResult(ApiOperationStatus.FAIL, "Non authorized to perform operation", null, null);
+        return new OperationResult(Status.FAIL, "Non authorized to perform operation", null, null);
     }
 
     public static OperationResult invalidRequest(String description) {
-        return new OperationResult(ApiOperationStatus.FAIL, description, null, null);
+        return new OperationResult(Status.FAIL, description, null, null);
 
     }
 
@@ -36,7 +36,7 @@ public class OperationResult {
                 .sum(amount)
                 .type(OperationType.DEPOSIT)
                 .build();
-        return new OperationResult(ApiOperationStatus.SUCCESS, "Successfully made deposit",
+        return new OperationResult(Status.SUCCESS, "Successfully made deposit",
                 event,
                 AccountView.from(account));
 
@@ -48,7 +48,7 @@ public class OperationResult {
                 .sum(amount)
                 .type(OperationType.WITHDRAW)
                 .build();
-        return new OperationResult(ApiOperationStatus.SUCCESS, "Successfully made withdraw",
+        return new OperationResult(Status.SUCCESS, "Successfully made withdraw",
                 event,
                 AccountView.from(account));
     }
@@ -60,7 +60,7 @@ public class OperationResult {
                 .sum(amount)
                 .type(OperationType.TRANSFER)
                 .build();
-        return new OperationResult(ApiOperationStatus.SUCCESS, "Successfully made transfer",
+        return new OperationResult(Status.SUCCESS, "Successfully made transfer",
                 event,
                 AccountView.from(account));
     }

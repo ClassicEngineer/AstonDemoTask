@@ -10,12 +10,12 @@ CREATE TABLE account  (
 CREATE TABLE transaction_history (
     id bigint PRIMARY KEY AUTO_INCREMENT,
     type enum('WITHDRAW', 'DEPOSIT', 'TRANSFER'),
-    transaction_date date,
-    in_account_id int,
-    out_account_id int NULL,
+    transaction_date datetime(6),
+    account_id int,
+    receive_account_id int DEFAULT NULL,
     operation_sum decimal,
-    FOREIGN KEY (in_account_id) REFERENCES account(id),
-    FOREIGN KEY (out_account_id) REFERENCES account(id)
+    FOREIGN KEY (account_id) REFERENCES account(id),
+    FOREIGN KEY (receive_account_id) REFERENCES account(id)
 );
 
 

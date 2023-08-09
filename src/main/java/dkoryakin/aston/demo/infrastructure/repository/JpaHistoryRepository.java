@@ -10,8 +10,8 @@ import java.util.Collection;
 @Repository
 public interface JpaHistoryRepository extends JpaRepository<TransactionHistoryEntity, Long> {
 
-    Collection<TransactionHistoryEntity> findAllByIncomeAccountIdEquals(Long accountId);
+    Collection<TransactionHistoryEntity> findAllByAccountIdEquals(Long accountId);
 
-    @Query(value =" SELECT DISTINCT history FROM TransactionHistoryEntity history WHERE history.receivingAccountId = :accountId OR history.incomeAccountId = :accountId")
-    Collection<TransactionHistoryEntity> findAllByIncomeAccountIdAndReceivingAccountIdEquals(Long accountId);
+    @Query(value =" SELECT DISTINCT history FROM TransactionHistoryEntity history WHERE history.receivingAccountId = :accountId OR history.accountId = :accountId")
+    Collection<TransactionHistoryEntity> findAllByAccountIdAndReceivingAccountIdEquals(Long accountId);
 }

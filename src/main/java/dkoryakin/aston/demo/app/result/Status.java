@@ -1,6 +1,6 @@
 package dkoryakin.aston.demo.app.result;
 
-public enum ApiOperationStatus {
+public enum Status {
     SUCCESS,
     FAIL
 }
