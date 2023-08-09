@@ -1,17 +1,15 @@
 # Demo Task for Aston
 
-## Time Spent
 
-12h
-
-
-# API
+# REST API
 
 See API endpoints at http://localhost:8080/swagger-ui/index.html#/
 
+## Execute queries
 
+You may take some queries with dummy data from `DemoRequests.postman_collection.json` file and import it to Postman
 
-## Solutions:
+# Solutions:
 
 - DDD-like style of package structure, DTO's namings, Entity and Domain class separating, using Value-objects (```Pin```) for making task more interesting
 - Domain Event - ```OperationDoneEvent``` that allows to separate saving transaction in history from making financial operation
@@ -23,6 +21,7 @@ See API endpoints at http://localhost:8080/swagger-ui/index.html#/
 
 To fill database with some data you may uncomment line at `db/changelog/changelog-root.xml` or execute file `db/changelog/scripts/fill.sql` directly
 
-## Execute queries
 
-You may take some queries with dummy data from `DemoRequests.postman_collection.json` file and import it to Postman
+## Time Spent
+
+12h
