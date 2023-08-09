@@ -13,7 +13,7 @@ See API endpoints at http://localhost:8080/swagger-ui/index.html#/
 
 ## Solutions:
 
-- DDD-like style of package structure, DTO's namings, Entity and Domain class separating, using Value-objects (```Pin```)
+- DDD-like style of package structure, DTO's namings, Entity and Domain class separating, using Value-objects (```Pin```) for making task more interesting
 - Domain Event - ```OperationDoneEvent``` that allows to separate saving transaction in history from making financial operation
 - Using in-memory H2 database to simplify development
 - Simple database structure with only two tables : `account` and `transaction_history`. For Withdraw and Deposit operation `receivingAccountId` should be NULL 
