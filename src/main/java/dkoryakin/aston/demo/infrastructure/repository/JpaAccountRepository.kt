@@ -1,13 +1,11 @@
-package dkoryakin.aston.demo.infrastructure.repository;
+package dkoryakin.aston.demo.infrastructure.repository
 
-import dkoryakin.aston.demo.infrastructure.entity.AccountEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
+import dkoryakin.aston.demo.infrastructure.entity.AccountEntity
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
-public interface JpaAccountRepository extends JpaRepository<AccountEntity, Long> {
-
-    Optional<AccountEntity> findByIdAndPin(Long accountId, String value);
+interface JpaAccountRepository : JpaRepository<AccountEntity, Long> {
+    fun findByIdAndPin(accountId: Long, value: String): Optional<AccountEntity>
 }

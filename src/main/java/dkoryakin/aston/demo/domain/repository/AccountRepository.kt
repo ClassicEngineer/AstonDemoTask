@@ -1,50 +1,44 @@
-package dkoryakin.aston.demo.domain.repository;
+package dkoryakin.aston.demo.domain.repository
 
-import dkoryakin.aston.demo.domain.Account;
-import dkoryakin.aston.demo.domain.Pin;
-import dkoryakin.aston.demo.infrastructure.factory.AccountFactory;
-import dkoryakin.aston.demo.infrastructure.repository.JpaAccountRepository;
-import dkoryakin.aston.demo.infrastructure.entity.AccountEntity;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
-import java.util.Collection;
-import java.util.Optional;
+import dkoryakin.aston.demo.domain.Account
+import dkoryakin.aston.demo.domain.Pin
+import dkoryakin.aston.demo.infrastructure.entity.AccountEntity
+import dkoryakin.aston.demo.infrastructure.factory.AccountFactory
+import dkoryakin.aston.demo.infrastructure.repository.JpaAccountRepository
+import lombok.RequiredArgsConstructor
+import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
 @RequiredArgsConstructor
-public class AccountRepository {
+class AccountRepository(private val jpaAccountRepository: JpaAccountRepository,
+                        private val accountFactory: AccountFactory) {
 
-    private final JpaAccountRepository jpaAccountRepository;
-    private final AccountFactory accountFactory;
-
-    public Account create(String name, Pin pin) {
-        var entity = AccountEntity.from(name, pin.getValue());
-        entity = jpaAccountRepository.save(entity);
-        return accountFactory.buildAccountFromEntity(entity);
+    fun create(name: String?, pin: Pin): Account {
+        var entity = AccountEntity.from(name, pin.value)
+        entity = jpaAccountRepository.save(entity)
+        return accountFactory.buildAccountFromEntity(entity)
     }
 
-    public Account save(Account account) {
-        var entity = accountFactory.buildEntityFromAccount(account);
-        entity = jpaAccountRepository.save(entity);
-        return accountFactory.buildAccountFromEntity(entity);
+    fun save(account: Account?): Account {
+        var entity = accountFactory.buildEntityFromAccount(account)
+        entity = jpaAccountRepository.save(entity)
+        return accountFactory.buildAccountFromEntity(entity)
     }
 
-
-    public Collection<Account> findAll() {
+    fun findAll(): Collection<Account> {
         return jpaAccountRepository.findAll()
                 .stream()
-                .map(accountFactory::buildAccountFromEntity)
-                .toList();
+                .map { entity: AccountEntity -> accountFactory.buildAccountFromEntity(entity) }
+                .toList()
     }
 
-    public Optional<Account> findAccountByIdAndPin(Long accountId, Pin pin) {
-        return jpaAccountRepository.findByIdAndPin(accountId, pin.getValue())
-                .map(accountFactory::buildAccountFromEntity);
+    fun findAccountByIdAndPin(accountId: Long?, pin: Pin): Optional<Account> {
+        return jpaAccountRepository.findByIdAndPin(accountId, pin.value)
+                .map { entity: AccountEntity -> accountFactory.buildAccountFromEntity(entity) }
     }
 
-    public Optional<Account> findAccountById(Long accountId) {
-        return jpaAccountRepository.findById(accountId).map(accountFactory::buildAccountFromEntity);
+    fun findAccountById(accountId: Long): Optional<Account> {
+        return jpaAccountRepository.findById(accountId).map { entity: AccountEntity -> accountFactory.buildAccountFromEntity(entity) }
     }
-
 }

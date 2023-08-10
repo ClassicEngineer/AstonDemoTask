@@ -1,30 +1,21 @@
-package dkoryakin.aston.demo.domain;
+package dkoryakin.aston.demo.domain
 
-import lombok.Builder;
-import lombok.Data;
+import kotlin.math.abs
 
-@Data
-@Builder
-public class Account {
+data class Account(private val id: Long,
+        private val name: String,
+        private val pin: Pin, var balance: Double) {
 
-    private Long id;
-
-    private String name;
-
-    private Pin pin;
-
-    private Double balance;
-
-    public void deposit(Double amount) {
-        balance +=amount;
+    fun deposit(amount: Double) {
+        balance += amount
     }
 
-    public void withdraw(Double amount) {
-        balance -= Math.abs(amount);
+    fun withdraw(amount: Double) {
+        balance -= abs(amount)
     }
 
-    public void transfer(Double amount, Account destination) {
-        balance -= amount;
-        destination.balance +=amount;
+    fun transfer(amount: Double, destination: Account) {
+        balance -= amount
+        destination.balance += amount
     }
 }

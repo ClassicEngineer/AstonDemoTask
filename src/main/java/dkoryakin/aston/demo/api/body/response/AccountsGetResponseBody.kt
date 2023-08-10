@@ -1,13 +1,6 @@
-package dkoryakin.aston.demo.api.body.response;
+package dkoryakin.aston.demo.api.body.response
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
-import java.util.List;
+class AccountsGetResponseBody(private val accounts: List<AccountView>) {
 
-@Data
-@AllArgsConstructor
-public class AccountsGetResponseBody {
-
-    private List<AccountView> accounts;
 }

@@ -1,116 +1,107 @@
-package dkoryakin.aston.demo.domain.service;
+package dkoryakin.aston.demo.domain.service
 
-import dkoryakin.aston.demo.domain.Account;
-import dkoryakin.aston.demo.domain.repository.AccountRepository;
-import dkoryakin.aston.demo.app.result.OperationResult;
-import dkoryakin.aston.demo.domain.Pin;
-import dkoryakin.aston.demo.infrastructure.factory.OperationResultFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
-import java.util.Optional;
+import dkoryakin.aston.demo.app.result.OperationResult
+import dkoryakin.aston.demo.domain.Account
+import dkoryakin.aston.demo.domain.Pin
+import dkoryakin.aston.demo.domain.repository.AccountRepository
+import dkoryakin.aston.demo.infrastructure.factory.OperationResultFactory
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.util.*
+import kotlin.math.abs
 
 @Service
 @Transactional
-@RequiredArgsConstructor
-public class AccountService {
-
-    private final AccountRepository accountRepository;
-    private final OperationResultFactory resultFactory;
-
-    public Account createAccount(String name, Pin pin) {
-        return accountRepository.create(name, pin);
+open class AccountService(
+    private val accountRepository: AccountRepository,
+    private val resultFactory: OperationResultFactory
+) {
+    fun createAccount(name: String?, pin: Pin?): Account {
+        return accountRepository.create(name, pin!!)
     }
 
     @Transactional(readOnly = true)
-    public Collection<Account> getAllAccounts() {
-        return accountRepository.findAll();
+    open fun retrieveAllAccounts(): Collection<Account> {
+        return accountRepository.findAll()
     }
-
 
     @Transactional(readOnly = true)
-    public Optional<Account> findAccountByIdAndPin(Long accountId, Pin pin) {
-        return accountRepository.findAccountByIdAndPin(accountId, pin);
+    open fun findAccountByIdAndPin(accountId: Long?, pin: Pin?): Optional<Account> {
+        return accountRepository.findAccountByIdAndPin(accountId, pin!!)
     }
 
-
-    public OperationResult makeDeposit(Long accountId, Double amount) {
-        Optional<Account> accountOptional = findAccountById(accountId);
-        if (accountOptional.isPresent()) {
-            Account account = accountOptional.get();
+    fun makeDeposit(accountId: Long, amount: Double): OperationResult {
+        val accountOptional = findAccountById(accountId)
+        return if (accountOptional.isPresent) {
+            val account = accountOptional.get()
             if (validateDeposit(amount)) {
-                account.deposit(amount);
-                save(account);
-                return resultFactory.successDeposit(account, amount);
+                account.deposit(amount)
+                save(account)
+                resultFactory.successDeposit(account, amount)
             } else {
-                return resultFactory.invalidOperation("Deposit must me positive");
+                resultFactory.invalidOperation("Deposit must me positive")
             }
         } else {
-            return resultFactory.nonAuthorized();
+            resultFactory.nonAuthorized()
         }
     }
 
-
-    public OperationResult makeWithdraw(Long accountId, Pin pin, Double amount) {
-        Optional<Account> accountOptional = findAccountByIdAndPin(accountId, pin);
-        if (accountOptional.isPresent()) {
-            Account account = accountOptional.get();
-            if (validateWithdraw(amount, account.getBalance())) {
-                account.withdraw(amount);
-                save(account);
-                return resultFactory.successWithdraw(account, amount);
+    fun makeWithdraw(accountId: Long, pin: Pin, amount: Double): OperationResult {
+        val accountOptional = findAccountByIdAndPin(accountId, pin)
+        return if (accountOptional.isPresent) {
+            val account = accountOptional.get()
+            if (validateWithdraw(amount, account.balance)) {
+                account.withdraw(amount)
+                save(account)
+                resultFactory.successWithdraw(account, amount)
             } else {
-                return resultFactory.invalidOperation("Withdraw must me less or equal balance");
+                resultFactory.invalidOperation("Withdraw must me less or equal balance")
             }
         } else {
-            return resultFactory.nonAuthorized();
+            resultFactory.nonAuthorized()
         }
     }
 
-    public OperationResult makeTransfer(Long accountId, Long transferToAccountId, Pin pin, Double amount) {
-        Optional<Account> accountOptional = findAccountByIdAndPin(accountId, pin);
-        if (accountOptional.isPresent()) {
-            Account account = accountOptional.get();
-            Optional<Account> destinationAccount = findAccountById(transferToAccountId);
-            if (validateTransfer(amount, account.getBalance())) {
-                if (destinationAccount.isPresent()) {
-                    Account destination = destinationAccount.get();
-                    account.transfer(amount, destination);
-                    save(account);
-                    save(destination);
+    fun makeTransfer(accountId: Long?, transferToAccountId: Long, pin: Pin?, amount: Double): OperationResult {
+        val accountOptional = findAccountByIdAndPin(accountId, pin)
+        return if (accountOptional.isPresent) {
+            val account = accountOptional.get()
+            val destinationAccount = findAccountById(transferToAccountId)
+            if (validateTransfer(amount, account.balance)) {
+                if (destinationAccount.isPresent) {
+                    val destination = destinationAccount.get()
+                    account.transfer(amount, destination)
+                    save(account)
+                    save(destination)
                 } else {
-                    return resultFactory.invalidOperation("Account with id: " + transferToAccountId +" is not exist.");
+                    return resultFactory.invalidOperation("Account with id: $transferToAccountId is not exist.")
                 }
-                return resultFactory.successTransfer(account, amount, transferToAccountId);
+                resultFactory.successTransfer(account, amount, transferToAccountId)
             } else {
-                return resultFactory.invalidOperation("Transfer sum must be less or equal balance");
+                resultFactory.invalidOperation("Transfer sum must be less or equal balance")
             }
         } else {
-            return resultFactory.nonAuthorized();
+            resultFactory.nonAuthorized()
         }
     }
 
-    private Optional<Account> findAccountById(Long accountId) {
-        return accountRepository.findAccountById(accountId);
+    private fun findAccountById(accountId: Long): Optional<Account> {
+        return accountRepository.findAccountById(accountId)
     }
 
-    private boolean validateTransfer(Double amount, Double balance) {
-        return amount > 0 && amount <= balance;
+    private fun validateTransfer(amount: Double, balance: Double): Boolean {
+        return amount > 0 && amount <= balance
     }
 
-
-    private boolean validateDeposit(Double amount) {
-        return amount > 0;
+    private fun validateDeposit(amount: Double): Boolean {
+        return amount > 0
     }
 
-    private boolean validateWithdraw(Double amount, Double balance) {
-        return Math.abs(amount) <= balance;
+    private fun validateWithdraw(amount: Double, balance: Double): Boolean {
+        return abs(amount) <= balance
     }
 
-    private void save(Account account) {
-        accountRepository.save(account);
+    private fun save(account: Account) {
+        accountRepository.save(account)
     }
-
 }

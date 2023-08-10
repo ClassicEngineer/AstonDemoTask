@@ -1,30 +1,23 @@
-package dkoryakin.aston.demo.domain.repository;
+package dkoryakin.aston.demo.domain.repository
 
-import dkoryakin.aston.demo.domain.TransactionHistoryEntry;
-import dkoryakin.aston.demo.infrastructure.factory.TransactionHistoryFactory;
-import dkoryakin.aston.demo.infrastructure.repository.JpaHistoryRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
-import java.util.Collection;
+import dkoryakin.aston.demo.domain.TransactionHistoryEntry
+import dkoryakin.aston.demo.infrastructure.entity.TransactionHistoryEntity
+import dkoryakin.aston.demo.infrastructure.factory.TransactionHistoryFactory
+import dkoryakin.aston.demo.infrastructure.repository.JpaHistoryRepository
+import org.springframework.stereotype.Repository
 
 @Repository
-@RequiredArgsConstructor
-public class HistoryRepository {
-
-    private final JpaHistoryRepository jpaHistoryRepository;
-    private final TransactionHistoryFactory factory;
-
-    public void save(TransactionHistoryEntry entry) {
-        jpaHistoryRepository.save(factory.buildEntityFromEntry(entry));
+class HistoryRepository(
+    private val jpaHistoryRepository: JpaHistoryRepository,
+    private val factory: TransactionHistoryFactory
+) {
+    fun save(entry: TransactionHistoryEntry?) {
+        jpaHistoryRepository.save(factory.buildEntityFromEntry(entry))
     }
 
-
-    public Collection<TransactionHistoryEntry> findAllByAccountId(Long accountId) {
+    fun findAllByAccountId(accountId: Long?): Collection<TransactionHistoryEntry> {
         return jpaHistoryRepository.findAllByAccountIdEquals(accountId)
-                .stream()
-                .map(factory::buildEntryFromEntity).toList();
+            .stream()
+            .map { entity: TransactionHistoryEntity? -> factory.buildEntryFromEntity(entity) }.toList()
     }
-
-
 }
