@@ -1,7 +1,7 @@
 package dkoryakin.aston.demo.domain.repository;
 
 import dkoryakin.aston.demo.domain.TransactionHistoryEntry;
-import dkoryakin.aston.demo.infrastructure.entity.TransactionHistoryEntity;
+import dkoryakin.aston.demo.infrastructure.factory.TransactionHistoryFactory;
 import dkoryakin.aston.demo.infrastructure.repository.JpaHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,35 +13,18 @@ import java.util.Collection;
 public class HistoryRepository {
 
     private final JpaHistoryRepository jpaHistoryRepository;
+    private final TransactionHistoryFactory factory;
 
     public void save(TransactionHistoryEntry entry) {
-        jpaHistoryRepository.save(buildEntityFromEntry(entry));
+        jpaHistoryRepository.save(factory.buildEntityFromEntry(entry));
     }
 
 
     public Collection<TransactionHistoryEntry> findAllByAccountId(Long accountId) {
         return jpaHistoryRepository.findAllByAccountIdEquals(accountId)
                 .stream()
-                .map(this::buildEntryFromEntity).toList();
+                .map(factory::buildEntryFromEntity).toList();
     }
 
-    private TransactionHistoryEntity buildEntityFromEntry(TransactionHistoryEntry entry) {
-        return TransactionHistoryEntity.builder()
-                .date(entry.getDate())
-                .type(entry.getType())
-                .sum(entry.getSum())
-                .accountId(entry.getIncomeAccountId())
-                .receivingAccountId(entry.getReceivingAccountId())
-                .build();
-    }
 
-    private TransactionHistoryEntry buildEntryFromEntity(TransactionHistoryEntity entity) {
-        return TransactionHistoryEntry.builder()
-                .date(entity.getDate())
-                .type(entity.getType())
-                .sum(entity.getSum())
-                .incomeAccountId(entity.getAccountId())
-                .receivingAccountId(entity.getReceivingAccountId())
-                .build();
-    }
 }

@@ -6,25 +6,22 @@ import lombok.extern.java.Log;
 
 import java.util.regex.Pattern;
 
-
-@Getter
 @Log
+@Getter
 public class Pin {
 
-    public final static Pattern PATTERN = Pattern.compile("[0-9]{4}");
+    private final static Pattern PATTERN = Pattern.compile("[0-9]{4}");
 
     private final String value;
 
-    public static Pin valueOf(String str) {
-        try {
-            String pin = str.substring(0, 4);
-            if (!PATTERN.matcher(pin).matches()) {
-                throw new IllegalArgumentException(str);
-            }
-            return new Pin(pin);
-        } catch (Exception e) {
-            log.warning("String: " + str + " is not valid pin");
-            throw new PinValidationException(e);
+    public static Pin valueOf(String pin) {
+        validate(pin);
+        return new Pin(pin);
+    }
+
+    public static void validate(String pin) {
+        if (pin == null || !PATTERN.matcher(pin).matches()) {
+            throw new PinValidationException("String: " + pin + " is not valid pin");
         }
     }
 

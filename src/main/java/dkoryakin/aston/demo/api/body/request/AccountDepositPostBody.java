@@ -1,4 +1,4 @@
-package dkoryakin.aston.demo.api.body;
+package dkoryakin.aston.demo.api.body.request;
 
 
 import lombok.AllArgsConstructor;

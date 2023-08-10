@@ -1,6 +1,5 @@
 package dkoryakin.aston.demo.domain;
 
-import dkoryakin.aston.demo.domain.event.OperationDoneEvent;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,14 +19,4 @@ public class TransactionHistoryEntry {
 
     private Double sum;
 
-
-    public static TransactionHistoryEntry from(OperationDoneEvent event) {
-        return TransactionHistoryEntry.builder()
-                .date(event.getDate())
-                .incomeAccountId(event.getAccountInId())
-                .receivingAccountId(event.getAccountOutId())
-                .sum(event.getSum())
-                .type(event.getType())
-                .build();
-    }
 }

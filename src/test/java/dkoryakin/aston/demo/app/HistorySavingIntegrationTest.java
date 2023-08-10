@@ -1,6 +1,6 @@
 package dkoryakin.aston.demo.app;
 
-import dkoryakin.aston.demo.api.body.AccountTransferPostBody;
+import dkoryakin.aston.demo.api.body.request.AccountTransferPostBody;
 import dkoryakin.aston.demo.api.body.response.HistoryGetResponseBody;
 import dkoryakin.aston.demo.domain.Account;
 import dkoryakin.aston.demo.domain.OperationType;
@@ -35,7 +35,7 @@ public class HistorySavingIntegrationTest {
                 .build();
 
         Account accountB = Account.builder()
-                .id(1L)
+                .id(2L)
                 .name("Ben")
                 .pin(Pin.valueOf("1234"))
                 .balance(0.0)
@@ -47,7 +47,7 @@ public class HistorySavingIntegrationTest {
         accountRepository.save(accountB);
 
 
-        accountApplicationService.makeTransfer(accountA.getId(),
+         accountApplicationService.makeTransfer(accountA.getId(),
                 new AccountTransferPostBody(accountA.getPin().getValue(), transferAmount, accountB.getId()));
 
 
@@ -57,6 +57,7 @@ public class HistorySavingIntegrationTest {
                 entry.getType().equals(OperationType.TRANSFER) && entry.getSum().equals(transferAmount) &&
                 entry.getIncomeAccountId().equals(accountA.getId()) && entry.getReceivingAccountId().equals(accountB.getId()));
 
+        Assertions.assertEquals(1, transactions.getEntries().size());
         Assertions.assertTrue(isAllMatch);
     }
 

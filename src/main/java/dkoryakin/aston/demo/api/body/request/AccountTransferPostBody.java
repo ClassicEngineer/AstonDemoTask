@@ -1,7 +1,6 @@
-package dkoryakin.aston.demo.api.body;
+package dkoryakin.aston.demo.api.body.request;
 
 import dkoryakin.aston.demo.infrastructure.validator.PinCodeConstraint;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountWithdrawPostBody {
+public class AccountTransferPostBody {
 
     @PinCodeConstraint
     private String pin;
 
-    public Double amount;
+    private Double amount;
 
+    private Long accountId;
 }

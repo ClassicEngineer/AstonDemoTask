@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class PinValidationException extends RuntimeException {
-    public PinValidationException(Exception e) {
-        super(e);
+    public PinValidationException(String message) {
+        super(message);
     }
 }

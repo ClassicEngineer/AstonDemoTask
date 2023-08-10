@@ -4,6 +4,8 @@ import dkoryakin.aston.demo.app.result.Status;
 import dkoryakin.aston.demo.domain.Account;
 import dkoryakin.aston.demo.domain.Pin;
 import dkoryakin.aston.demo.domain.repository.AccountRepository;
+import dkoryakin.aston.demo.infrastructure.factory.AccountFactory;
+import dkoryakin.aston.demo.infrastructure.factory.OperationResultFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,9 +28,11 @@ class AccountServiceTest {
     @Mock
     private AccountRepository accountRepository;
 
+
     @BeforeEach
     public void init() {
-        this.accountService = new AccountService(accountRepository);
+        var resultFactory = new OperationResultFactory(new AccountFactory());
+        this.accountService = new AccountService(accountRepository, resultFactory);
     }
 
     @Test

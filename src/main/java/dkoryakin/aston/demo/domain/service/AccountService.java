@@ -4,6 +4,7 @@ import dkoryakin.aston.demo.domain.Account;
 import dkoryakin.aston.demo.domain.repository.AccountRepository;
 import dkoryakin.aston.demo.app.result.OperationResult;
 import dkoryakin.aston.demo.domain.Pin;
+import dkoryakin.aston.demo.infrastructure.factory.OperationResultFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final OperationResultFactory resultFactory;
 
     public Account createAccount(String name, Pin pin) {
         return accountRepository.create(name, pin);
@@ -27,6 +29,8 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
+
+    @Transactional(readOnly = true)
     public Optional<Account> findAccountByIdAndPin(Long accountId, Pin pin) {
         return accountRepository.findAccountByIdAndPin(accountId, pin);
     }
@@ -39,12 +43,12 @@ public class AccountService {
             if (validateDeposit(amount)) {
                 account.deposit(amount);
                 save(account);
-                return OperationResult.successDeposit(account, amount);
+                return resultFactory.successDeposit(account, amount);
             } else {
-                return OperationResult.invalidRequest("Deposit must me positive");
+                return resultFactory.invalidOperation("Deposit must me positive");
             }
         } else {
-            return OperationResult.nonAuthorized();
+            return resultFactory.nonAuthorized();
         }
     }
 
@@ -56,12 +60,12 @@ public class AccountService {
             if (validateWithdraw(amount, account.getBalance())) {
                 account.withdraw(amount);
                 save(account);
-                return OperationResult.successWithdraw(account, amount);
+                return resultFactory.successWithdraw(account, amount);
             } else {
-                return OperationResult.invalidRequest("Withdraw must me less or equal balance");
+                return resultFactory.invalidOperation("Withdraw must me less or equal balance");
             }
         } else {
-            return OperationResult.nonAuthorized();
+            return resultFactory.nonAuthorized();
         }
     }
 
@@ -77,14 +81,14 @@ public class AccountService {
                     save(account);
                     save(destination);
                 } else {
-                    return OperationResult.invalidRequest("Account with id: " + transferToAccountId +" is not exist.");
+                    return resultFactory.invalidOperation("Account with id: " + transferToAccountId +" is not exist.");
                 }
-                return OperationResult.successTransfer(account, amount, transferToAccountId);
+                return resultFactory.successTransfer(account, amount, transferToAccountId);
             } else {
-                return OperationResult.invalidRequest("Transfer sum must be less or equal balance");
+                return resultFactory.invalidOperation("Transfer sum must be less or equal balance");
             }
         } else {
-            return OperationResult.nonAuthorized();
+            return resultFactory.nonAuthorized();
         }
     }
 

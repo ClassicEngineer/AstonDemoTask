@@ -1,9 +1,9 @@
 package dkoryakin.aston.demo.api;
 
-import dkoryakin.aston.demo.api.body.AccountDepositPostBody;
-import dkoryakin.aston.demo.api.body.AccountTransferPostBody;
-import dkoryakin.aston.demo.api.body.AccountCreatePostBody;
-import dkoryakin.aston.demo.api.body.AccountWithdrawPostBody;
+import dkoryakin.aston.demo.api.body.request.AccountDepositPostBody;
+import dkoryakin.aston.demo.api.body.request.AccountTransferPostBody;
+import dkoryakin.aston.demo.api.body.request.AccountCreatePostBody;
+import dkoryakin.aston.demo.api.body.request.AccountWithdrawPostBody;
 import dkoryakin.aston.demo.api.body.response.AccountView;
 import dkoryakin.aston.demo.app.AccountApplicationService;
 

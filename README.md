@@ -1,5 +1,8 @@
 # Demo Task for Aston
 
+# Run
+
+Run by `./mvnw spring-boot:run`
 
 # REST API
 
@@ -24,4 +27,4 @@ To fill database with some data you may uncomment line at `db/changelog/changelo
 
 ## Time Spent
 
-12h
+12h 30m

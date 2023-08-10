@@ -1,12 +1,15 @@
 package dkoryakin.aston.demo.app;
 
-import dkoryakin.aston.demo.api.body.*;
-import dkoryakin.aston.demo.api.body.response.AccountView;
+import dkoryakin.aston.demo.api.body.request.AccountCreatePostBody;
+import dkoryakin.aston.demo.api.body.request.AccountDepositPostBody;
+import dkoryakin.aston.demo.api.body.request.AccountTransferPostBody;
+import dkoryakin.aston.demo.api.body.request.AccountWithdrawPostBody;
 import dkoryakin.aston.demo.app.result.AccountCreationResult;
 import dkoryakin.aston.demo.api.body.response.AccountsGetResponseBody;
 import dkoryakin.aston.demo.app.result.OperationResult;
 import dkoryakin.aston.demo.domain.service.AccountService;
 import dkoryakin.aston.demo.domain.Pin;
+import dkoryakin.aston.demo.infrastructure.factory.AccountFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -17,16 +20,18 @@ public class AccountApplicationService {
 
     private final AccountService accountService;
 
+    private final AccountFactory factory;
+
     private final ApplicationEventPublisher eventPublisher;
 
     public AccountCreationResult createAccount(AccountCreatePostBody body) {
         var account = accountService.createAccount(body.getName(), Pin.valueOf(body.getPin()));
-        return AccountCreationResult.success(AccountView.from(account));
+        return AccountCreationResult.success(factory.buildViewFromAccount(account));
     }
 
     public AccountsGetResponseBody getAllAccounts() {
         var views = accountService.getAllAccounts().stream()
-                .map(AccountView::from)
+                .map(factory::buildViewFromAccount)
                 .toList();
         return new AccountsGetResponseBody(views);
     }
