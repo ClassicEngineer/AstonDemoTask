@@ -27,6 +27,13 @@ public class AccountFactory {
                 .build();
     }
 
+    public  AccountEntity buildEntityFromNameAndPin(String name, String pin) {
+        return AccountEntity.builder()
+                .name(name)
+                .pin(pin)
+                .build();
+    }
+
     public AccountView buildViewFromAccount(Account account) {
         return AccountView.builder()
                 .id(account.getId())

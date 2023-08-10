@@ -19,7 +19,7 @@ public class AccountRepository {
     private final AccountFactory accountFactory;
 
     public Account create(String name, Pin pin) {
-        var entity = AccountEntity.from(name, pin.getValue());
+        var entity = accountFactory.buildEntityFromNameAndPin(name, pin.getValue());
         entity = jpaAccountRepository.save(entity);
         return accountFactory.buildAccountFromEntity(entity);
     }

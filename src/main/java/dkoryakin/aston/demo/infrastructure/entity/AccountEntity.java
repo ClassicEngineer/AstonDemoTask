@@ -28,10 +28,4 @@ public class AccountEntity {
     @Builder.Default
     private Double balance = 0.0;
 
-    public static AccountEntity from(String name, String pin) {
-        return AccountEntity.builder()
-                .name(name)
-                .pin(pin)
-                .build();
-    }
 }
