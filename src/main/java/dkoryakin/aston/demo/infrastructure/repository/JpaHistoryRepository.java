@@ -12,6 +12,4 @@ public interface JpaHistoryRepository extends JpaRepository<TransactionHistoryEn
 
     Collection<TransactionHistoryEntity> findAllByAccountIdEquals(Long accountId);
 
-    @Query(value =" SELECT DISTINCT history FROM TransactionHistoryEntity history WHERE history.receivingAccountId = :accountId OR history.accountId = :accountId")
-    Collection<TransactionHistoryEntity> findAllByAccountIdAndReceivingAccountIdEquals(Long accountId);
 }

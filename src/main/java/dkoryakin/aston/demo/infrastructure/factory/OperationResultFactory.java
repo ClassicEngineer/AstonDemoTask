@@ -8,6 +8,8 @@ import dkoryakin.aston.demo.domain.event.OperationDoneEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 @RequiredArgsConstructor
 public class OperationResultFactory {
@@ -23,9 +25,9 @@ public class OperationResultFactory {
 
     }
 
-    public OperationResult successDeposit(Account account, Double amount) {
+    public OperationResult successDeposit(Account account, BigDecimal amount) {
         var event = OperationDoneEvent.builder()
-                .accountInId(account.getId())
+                .accountId(account.getId())
                 .sum(amount)
                 .type(OperationType.DEPOSIT)
                 .build();
@@ -35,9 +37,9 @@ public class OperationResultFactory {
 
     }
 
-    public OperationResult successWithdraw(Account account, Double amount) {
+    public OperationResult successWithdraw(Account account, BigDecimal amount) {
         var event = OperationDoneEvent.builder()
-                .accountInId(account.getId())
+                .accountId(account.getId())
                 .sum(amount)
                 .type(OperationType.WITHDRAW)
                 .build();
@@ -46,10 +48,10 @@ public class OperationResultFactory {
                 accountFactory.buildViewFromAccount(account));
     }
 
-    public OperationResult successTransfer(Account account, Double amount, Long transferToAccountId) {
+    public OperationResult successTransfer(Account account, BigDecimal amount, Long transferToAccountId) {
         var event = OperationDoneEvent.builder()
-                .accountInId(account.getId())
-                .accountOutId(transferToAccountId)
+                .accountId(account.getId())
+                .receivingAccountId(transferToAccountId)
                 .sum(amount)
                 .type(OperationType.TRANSFER)
                 .build();

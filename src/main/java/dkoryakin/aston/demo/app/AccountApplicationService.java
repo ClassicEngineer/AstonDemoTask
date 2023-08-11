@@ -55,5 +55,4 @@ public class AccountApplicationService {
         return result;
     }
 
-
 }

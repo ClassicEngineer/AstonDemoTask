@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
+import java.math.BigDecimal;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AccountRestControllerTest {
 
@@ -44,10 +46,10 @@ public class AccountRestControllerTest {
     @Test
     public void shouldReturnCorrectBody_WhenMakingDepositOperation() {
         Long accountId = 1L;
-        Double amount = 100.0;
+        BigDecimal amount = BigDecimal.valueOf(100);
         Account test = Account.builder()
                 .id(accountId)
-                .balance(0.0)
+                .balance(BigDecimal.ZERO)
                 .pin(Pin.valueOf("1234"))
                 .name("Dan")
                 .build();
@@ -56,7 +58,7 @@ public class AccountRestControllerTest {
         AccountView response = this.restTemplate.postForObject("http://localhost:" + port + "/" + ACCOUNT_API_PREFIX + accountId + DEPOSIT,
                 new AccountDepositPostBody(amount), AccountView.class);
 
-        Assertions.assertEquals(100.0, response.getBalance());
+        Assertions.assertEquals(BigDecimal.valueOf(100), response.getBalance());
         Assertions.assertEquals(accountId, response.getId());
     }
 

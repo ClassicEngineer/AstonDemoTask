@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -13,7 +15,7 @@ public class AccountView {
 
     private String name;
 
-    private Double balance;
+    private BigDecimal balance;
 
 
 }

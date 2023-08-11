@@ -3,6 +3,8 @@ package dkoryakin.aston.demo.domain;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 public class Account {
@@ -13,18 +15,18 @@ public class Account {
 
     private Pin pin;
 
-    private Double balance;
+    private BigDecimal balance;
 
-    public void deposit(Double amount) {
-        balance +=amount;
+    public void deposit(BigDecimal amount) {
+        balance = balance.add(amount);
     }
 
-    public void withdraw(Double amount) {
-        balance -= Math.abs(amount);
+    public void withdraw(BigDecimal amount) {
+        balance = balance.subtract(amount.abs());
     }
 
-    public void transfer(Double amount, Account destination) {
-        balance -= amount;
-        destination.balance +=amount;
+    public void transfer(BigDecimal amount, Account destination) {
+        balance = balance.subtract(amount.abs());
+        destination.balance = balance.add(amount);
     }
 }

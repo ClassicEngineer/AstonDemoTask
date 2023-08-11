@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.mockito.Mockito.times;
@@ -41,7 +42,7 @@ class AccountServiceTest {
         Pin pin = Pin.valueOf("1234");
         Account expected = Account.builder()
                 .id(1L)
-                .balance(0.0)
+                .balance(BigDecimal.ZERO)
                 .pin(pin)
                 .name(name)
                 .build();
@@ -63,12 +64,12 @@ class AccountServiceTest {
         Pin pin = Pin.valueOf("1234");
         Account expected = Account.builder()
                 .id(1L)
-                .balance(0.0)
+                .balance(BigDecimal.ZERO)
                 .pin(pin)
                 .name(name)
                 .build();
 
-        Double depositSum = 100.0;
+        BigDecimal depositSum = BigDecimal.valueOf(100.0);
 
         Mockito.when(accountRepository.findAccountById(expected.getId()))
                 .thenReturn(Optional.of(expected));
@@ -86,10 +87,10 @@ class AccountServiceTest {
     public void shouldNotMakeWithdraw_whenAmountIsNotCorrect() {
         Long accountId= 1L;
         Pin pin = Pin.valueOf("1234");
-        Double incorrectAmount = 3000.0;
+        BigDecimal incorrectAmount = BigDecimal.valueOf(3000.0);
         Account expected = Account.builder()
                 .id(1L)
-                .balance(0.0)
+                .balance(BigDecimal.ZERO)
                 .pin(pin)
                 .name("Dan")
                 .build();
@@ -107,10 +108,10 @@ class AccountServiceTest {
     public void shouldNotMakeTransfer_whenOutcomeIdIsNotCorrect() {
         Long accountId= 1L;
         Pin pin = Pin.valueOf("1234");
-        Double transferAmount = 5.0;
+        BigDecimal transferAmount = BigDecimal.valueOf(5.0);
         Account expected = Account.builder()
                 .id(1L)
-                .balance(10.0)
+                .balance(BigDecimal.valueOf(10.0))
                 .pin(pin)
                 .name("Dan")
                 .build();
@@ -132,18 +133,18 @@ class AccountServiceTest {
         Pin pin = Pin.valueOf("1234");
         Account accountA = Account.builder()
                 .id(1L)
-                .balance(100.0)
+                .balance(BigDecimal.valueOf(100.0))
                 .pin(pin)
                 .name("Dan")
                 .build();
 
         Account accountB = Account.builder()
                 .id(2L)
-                .balance(0.0)
+                .balance(BigDecimal.valueOf(0.0))
                 .pin(pin)
                 .name("Ben")
                 .build();
-        Double transferAmount = 50.0;
+        BigDecimal transferAmount = BigDecimal.valueOf(50.0);
 
         Mockito.when(accountRepository.findAccountByIdAndPin(accountA.getId(), accountA.getPin())).thenReturn(Optional.of(accountA));
         Mockito.when(accountRepository.findAccountById(accountB.getId())).thenReturn(Optional.of(accountB));
@@ -157,8 +158,8 @@ class AccountServiceTest {
         Account b = accountCaptor.getAllValues().stream().filter(account -> account.getId().equals(accountB.getId())).findFirst().get();
 
 
-        Assertions.assertEquals(50.0, a.getBalance());
-        Assertions.assertEquals(50.0, b.getBalance());
+        Assertions.assertEquals(BigDecimal.valueOf(50.0), a.getBalance());
+        Assertions.assertEquals(BigDecimal.valueOf(50.0), b.getBalance());
         Assertions.assertEquals(Status.SUCCESS, result.getStatus());
     }
 

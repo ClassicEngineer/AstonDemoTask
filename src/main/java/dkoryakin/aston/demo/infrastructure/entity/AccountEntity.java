@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.math.BigDecimal;
+
 @Entity
 @Builder
 @Getter
@@ -23,9 +25,8 @@ public class AccountEntity {
     @Column(name = "pin")
     private String pin;
 
-    @Column(name = "balance", columnDefinition = "decimal DEFAULT 0.0")
-    @ColumnDefault("0.0")
+    @Column(name = "balance")
     @Builder.Default
-    private Double balance = 0.0;
+    private BigDecimal balance = BigDecimal.ZERO;
 
 }

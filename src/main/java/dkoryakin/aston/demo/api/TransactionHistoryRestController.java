@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TransactionHistoryRestController {
 
-
     private final HistoryApplicationService historyApplicationService;
 
     @ResponseStatus(HttpStatus.OK)

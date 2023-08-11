@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+
 @SpringBootTest
 public class HistorySavingIntegrationTest {
 
@@ -31,17 +33,17 @@ public class HistorySavingIntegrationTest {
                 .id(1L)
                 .name("Dan")
                 .pin(Pin.valueOf("1234"))
-                .balance(100.0)
+                .balance(BigDecimal.valueOf(100.0))
                 .build();
 
         Account accountB = Account.builder()
                 .id(2L)
                 .name("Ben")
                 .pin(Pin.valueOf("1234"))
-                .balance(0.0)
+                .balance(BigDecimal.valueOf(0.0))
                 .build();
 
-        Double transferAmount = 100.0;
+        BigDecimal transferAmount = BigDecimal.valueOf(100);
 
         accountRepository.save(accountA);
         accountRepository.save(accountB);

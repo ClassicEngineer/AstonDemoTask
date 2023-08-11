@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,6 +18,6 @@ public class AccountWithdrawPostBody {
     private String pin;
 
     @NotNull
-    public Double amount;
+    public BigDecimal amount;
 
 }

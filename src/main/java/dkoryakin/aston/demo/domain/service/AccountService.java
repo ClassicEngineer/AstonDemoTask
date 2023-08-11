@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -36,7 +37,7 @@ public class AccountService {
     }
 
 
-    public OperationResult makeDeposit(Long accountId, Double amount) {
+    public OperationResult makeDeposit(Long accountId, BigDecimal amount) {
         Optional<Account> accountOptional = findAccountById(accountId);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
@@ -53,7 +54,7 @@ public class AccountService {
     }
 
 
-    public OperationResult makeWithdraw(Long accountId, Pin pin, Double amount) {
+    public OperationResult makeWithdraw(Long accountId, Pin pin, BigDecimal amount) {
         Optional<Account> accountOptional = findAccountByIdAndPin(accountId, pin);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
@@ -69,7 +70,7 @@ public class AccountService {
         }
     }
 
-    public OperationResult makeTransfer(Long accountId, Long transferToAccountId, Pin pin, Double amount) {
+    public OperationResult makeTransfer(Long accountId, Long transferToAccountId, Pin pin, BigDecimal amount) {
         Optional<Account> accountOptional = findAccountByIdAndPin(accountId, pin);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
@@ -96,17 +97,17 @@ public class AccountService {
         return accountRepository.findAccountById(accountId);
     }
 
-    private boolean validateTransfer(Double amount, Double balance) {
-        return amount > 0 && amount <= balance;
+    private boolean validateTransfer(BigDecimal amount, BigDecimal balance) {
+        return amount.compareTo(BigDecimal.ZERO) > 0 && amount.compareTo(balance) <= 0;
     }
 
 
-    private boolean validateDeposit(Double amount) {
-        return amount > 0;
+    private boolean validateDeposit(BigDecimal amount) {
+        return amount.compareTo(BigDecimal.ZERO) > 0;
     }
 
-    private boolean validateWithdraw(Double amount, Double balance) {
-        return Math.abs(amount) <= balance;
+    private boolean validateWithdraw(BigDecimal amount, BigDecimal balance) {
+        return amount.abs().compareTo(balance) <= 0;
     }
 
     private void save(Account account) {

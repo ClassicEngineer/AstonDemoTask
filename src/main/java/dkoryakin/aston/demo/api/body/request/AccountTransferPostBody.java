@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +17,7 @@ public class AccountTransferPostBody {
     private String pin;
 
     @NotNull
-    private Double amount;
+    private BigDecimal amount;
 
     @NotNull
     private Long accountId;

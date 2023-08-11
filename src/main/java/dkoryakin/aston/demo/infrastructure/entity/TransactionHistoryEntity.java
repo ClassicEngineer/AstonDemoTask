@@ -1,9 +1,10 @@
 package dkoryakin.aston.demo.infrastructure.entity;
 
-import dkoryakin.aston.demo.domain.OperationType;
+import dkoryakin.aston.demo.domain.history.SingleAccountOperationType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -21,7 +22,7 @@ public class TransactionHistoryEntity {
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
-    private OperationType type;
+    private SingleAccountOperationType type;
 
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,9 +32,7 @@ public class TransactionHistoryEntity {
     @Column(name = "account_id")
     private Long accountId;
 
-    @Column(name = "receive_account_id")
-    private Long receivingAccountId;
 
     @Column(name = "operation_sum")
-    private Double sum;
+    private BigDecimal sum;
 }

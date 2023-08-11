@@ -4,6 +4,7 @@ import dkoryakin.aston.demo.domain.OperationType;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -18,5 +19,5 @@ public class HistoryEntryView {
 
     private Long receivingAccountId;
 
-    private Double sum;
+    private BigDecimal sum;
 }

@@ -12,8 +12,12 @@ public class OperationDoneEventListener {
 
     private final HistoryService historyService;
 
+    // IT may be TransactionEventListener
     @EventListener
     public void handleOperationDoneEvent(OperationDoneEvent event) {
-        historyService.handle(event);
+        switch (event.getType()) {
+            case DEPOSIT, WITHDRAW -> historyService.saveToHistory(event);
+            case TRANSFER -> historyService.saveTransferToHistory(event);
+        }
     }
 }

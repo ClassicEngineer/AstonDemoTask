@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Builder
@@ -12,13 +13,13 @@ import java.util.Date;
 @ToString
 public class OperationDoneEvent {
 
-    private Long accountInId;
+    private Long accountId;
 
-    private Long accountOutId;
+    private Long receivingAccountId;
 
     private OperationType type;
 
-    private Double sum;
+    private BigDecimal sum;
 
     @Builder.Default
     private Date date = new Date();
